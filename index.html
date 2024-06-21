@@ -166,10 +166,14 @@
         }
 
         function checkout() {
-            const total = cart.reduce((sum, product) => sum + product.price, 0);
-            tg.sendData(JSON.stringify({ cart, total }));
-            tg.close();
-        }
+    const cartItems = cart.map(product => ({
+        id: product.id,
+        price: product.price,
+        quantity: 1  // You may want to add quantity functionality to your cart
+    }));
+    tg.sendData(JSON.stringify({ cart: cartItems }));
+    tg.close();
+}
 
         function showProductDetails(productId) {
             const product = products.find(p => p.id === productId);
