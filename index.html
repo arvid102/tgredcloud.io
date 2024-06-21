@@ -103,12 +103,14 @@
 
         // Fetch products from the server
         fetch('https://6223-2a03-ec00-b9a0-3fef-a4e0-1ccb-1ce5-d749.ngrok-free.app/get_products')
-            .then(response => response.json())
-            .then(data => {
-                products = data;
-                displayProducts(products);
-                populateCategories();
-            });
+           .then(response => response.json())
+    .then(data => {
+        console.log("Received data:", data);
+        products = data;
+        displayProducts(products);
+        populateCategories();
+    })
+    .catch(error => console.error('Error fetching products:', error));
 
         function displayProducts(productsToShow) {
             const productList = document.getElementById("product-list");
