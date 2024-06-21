@@ -64,6 +64,11 @@
         #category-filter {
             margin-bottom: 20px;
         }
+          .product img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -93,6 +98,52 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
+        // We'll fetch products from the server instead of hardcoding them
+        let products = [];
+
+        // Fetch products from the server
+        fetch('/get_products')
+            .then(response => response.json())
+            .then(data => {
+                products = data;
+                displayProducts(products);
+                populateCategories();
+            });
+
+        function displayProducts(productsToShow) {
+            const productList = document.getElementById("product-list");
+            productList.innerHTML = "";
+            productsToShow.forEach(product => {
+                const productDiv = document.createElement("div");
+                productDiv.className = "product";
+                productDiv.innerHTML = `
+                    <img src="${product.image_url}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p>Price: $${product.price}</p>
+                    <p>Category: ${product.category}</p>
+                    <button onclick="showProductDetails(${product.id})">View Details</button>
+                    <button onclick="addToCart(${product.id})">Add to Cart</button>
+                `;
+                productList.appendChild(productDiv);
+            });
+        }
+
+        function showProductDetails(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                const detailsDiv = document.getElementById("product-details");
+                detailsDiv.innerHTML = `
+                    <img src="${product.image_url}" alt="${product.name}" style="max-width: 100%; height: auto;">
+                    <h2>${product.name}</h2>
+                    <p>Price: $${product.price}</p>
+                    <p>Category: ${product.category}</p>
+                    <p>${product.description}</p>
+                    <button onclick="addToCart(${product.id})">Add to Cart</button>
+                `;
+                document.getElementById("product-modal").style.display = "block";
+            }
+        }
+        
         const products = [
             { id: 1, name: "Product 1", price: 10, description: "This is product 1 description.", category: "Electronics" },
             { id: 2, name: "Product 2", price: 20, description: "This is product 2 description.", category: "Clothing" },
