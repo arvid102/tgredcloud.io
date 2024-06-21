@@ -61,10 +61,19 @@
             font-weight: bold;
             cursor: pointer;
         }
+        #category-filter {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <h1>Our Products</h1>
+    <div id="category-filter">
+        <label for="category-select">Filter by category:</label>
+        <select id="category-select" onchange="filterProducts()">
+            <option value="all">All Categories</option>
+        </select>
+    </div>
     <div id="product-list"></div>
     <div id="cart">
         <h2>Shopping Cart</h2>
@@ -85,23 +94,48 @@
         tg.expand();
 
         const products = [
-            { id: 1, name: "Product 1", price: 10, description: "This is product 1 description." },
-            { id: 2, name: "Product 2", price: 20, description: "This is product 2 description." },
-            { id: 3, name: "Product 3", price: 30, description: "This is product 3 description." }
+            { id: 1, name: "Product 1", price: 10, description: "This is product 1 description.", category: "Electronics" },
+            { id: 2, name: "Product 2", price: 20, description: "This is product 2 description.", category: "Clothing" },
+            { id: 3, name: "Product 3", price: 30, description: "This is product 3 description.", category: "Electronics" },
+            { id: 4, name: "Product 4", price: 25, description: "This is product 4 description.", category: "Books" },
+            { id: 5, name: "Product 5", price: 15, description: "This is product 5 description.", category: "Clothing" }
         ];
 
-        const productList = document.getElementById("product-list");
-        products.forEach(product => {
-            const productDiv = document.createElement("div");
-            productDiv.className = "product";
-            productDiv.innerHTML = `
-                <h3>${product.name}</h3>
-                <p>Price: $${product.price}</p>
-                <button onclick="showProductDetails(${product.id})">View Details</button>
-                <button onclick="addToCart(${product.id})">Add to Cart</button>
-            `;
-            productList.appendChild(productDiv);
+        const categories = [...new Set(products.map(product => product.category))];
+        const categorySelect = document.getElementById("category-select");
+        categories.forEach(category => {
+            const option = document.createElement("option");
+            option.value = category;
+            option.textContent = category;
+            categorySelect.appendChild(option);
         });
+
+        function displayProducts(productsToShow) {
+            const productList = document.getElementById("product-list");
+            productList.innerHTML = "";
+            productsToShow.forEach(product => {
+                const productDiv = document.createElement("div");
+                productDiv.className = "product";
+                productDiv.innerHTML = `
+                    <h3>${product.name}</h3>
+                    <p>Price: $${product.price}</p>
+                    <p>Category: ${product.category}</p>
+                    <button onclick="showProductDetails(${product.id})">View Details</button>
+                    <button onclick="addToCart(${product.id})">Add to Cart</button>
+                `;
+                productList.appendChild(productDiv);
+            });
+        }
+
+        function filterProducts() {
+            const selectedCategory = document.getElementById("category-select").value;
+            const filteredProducts = selectedCategory === "all" 
+                ? products 
+                : products.filter(product => product.category === selectedCategory);
+            displayProducts(filteredProducts);
+        }
+
+        displayProducts(products);
 
         const cart = [];
 
@@ -144,6 +178,7 @@
                 detailsDiv.innerHTML = `
                     <h2>${product.name}</h2>
                     <p>Price: $${product.price}</p>
+                    <p>Category: ${product.category}</p>
                     <p>${product.description}</p>
                     <button onclick="addToCart(${product.id})">Add to Cart</button>
                 `;
