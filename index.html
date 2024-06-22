@@ -102,7 +102,7 @@
         let products = [];
 
         // Fetch products from the server
-        fetch('https://6223-2a03-ec00-b9a0-3fef-a4e0-1ccb-1ce5-d749.ngrok-free.app/get_products')
+        fetch('http://localhost:8080/get_products')
            .then(response => response.json())
     .then(data => {
         console.log("Received data:", data);
