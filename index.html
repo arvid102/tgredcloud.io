@@ -306,14 +306,23 @@ function pickFlower(el){
 function fmt(d){if(!d)return'—';return d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear();}
 
 async function tgSend(chat_id, text){
-  if(!TG_TOKEN || TG_TOKEN==='8708871819:AAGLarkQhSHXIUrj6Y4fbfjiaOzTU7HDQX4') return;
+  if(!TG_TOKEN || TG_TOKEN==='СЮДА_ТОКЕН_БОТА'){
+    console.warn('TG: токен не заполнен');
+    return {ok:false, error:'токен не заполнен'};
+  }
   try{
-    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,{
+    const res  = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({chat_id, text, parse_mode:'HTML'})
     });
-  }catch(e){console.warn('TG error',e);}
+    const json = await res.json();
+    console.log('TG sendMessage →', chat_id, json);
+    return json;
+  }catch(e){
+    console.error('TG fetch error:', e);
+    return {ok:false, error:e.message};
+  }
 }
 
 async function answer(v){
@@ -350,7 +359,13 @@ async function answer(v){
     myMsg += `✅ <b>Ответ: ДА, идёт!</b>\n`;
     myMsg += `🕐 <i>${now} (Рига)</i>`;
 
-    await tgSend(MY_CHAT_ID, myMsg);
+    const r1 = await tgSend(MY_CHAT_ID, myMsg);
+    if(!r1?.ok){
+      hint.textContent = '⚠️ Ошибка: ' + (r1?.description || r1?.error || 'неизвестно');
+      hint.style.color = '#c85a5a';
+      btn.disabled = false;
+      return;
+    }
 
     // ── Ей: милое короткое подтверждение ──────────────────────
     if(user?.id){
@@ -398,9 +413,13 @@ async function answer(v){
     myMsg += `❌ <b>Ответ: не в этот раз</b>\n`;
     myMsg += `🕐 <i>${now} (Рига)</i>`;
 
-    await tgSend(MY_CHAT_ID, myMsg);
-
-    // ── Ей: ничего не отправляем (она сама нажала "нет") ──────
+    const r2 = await tgSend(MY_CHAT_ID, myMsg);
+    if(!r2?.ok){
+      hint.textContent = '⚠️ Ошибка: ' + (r2?.description || r2?.error || 'неизвестно');
+      hint.style.color = '#c85a5a';
+      btn.disabled = false;
+      return;
+    }
     show('sNo');
   }
 }
