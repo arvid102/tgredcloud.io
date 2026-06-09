@@ -1,259 +1,446 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telegram Web App Shop</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f0f0f0;
-        }
-        .product {
-            background-color: white;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        button {
-            background-color: #4CAF50;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-        }
-        #cart {
-            background-color: white;
-            border-radius: 5px;
-            padding: 10px;
-            margin-top: 20px;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.4);
-        }
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        #category-filter {
-            margin-bottom: 20px;
-        }
-          .product img {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 10px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Приглашение</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Lora:ital,wght@0,400;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#faf8f5;--card:#ffffff;--border:#ede8e0;
+  --text:#1c1612;--muted:#a09688;--accent:#c4855a;
+  --accent-light:#f5ece4;--radius:16px;
+}
+html{font-size:16px;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  min-height:100vh;display:flex;align-items:flex-start;justify-content:center;
+  padding:28px 0 52px;
+}
+.app{width:100%;max-width:400px;padding:0 18px;}
+.screen{display:none;animation:up .38s cubic-bezier(.16,1,.3,1) both;}
+.screen.active{display:block;}
+@keyframes up{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+.top-deco{text-align:center;font-size:2rem;margin-bottom:20px;line-height:1;}
+.heading{margin-bottom:24px;}
+.heading-label{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.heading-title{font-family:'Lora',serif;font-size:1.9rem;line-height:1.22;color:var(--text);}
+.heading-title em{font-style:italic;color:var(--accent);}
+.heading-sub{margin-top:9px;font-size:.85rem;color:var(--muted);line-height:1.6;}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.cal-month{font-family:'Lora',serif;font-size:1rem;font-style:italic;color:var(--text);}
+.cal-btn{background:none;border:1px solid var(--border);color:var(--muted);width:32px;height:32px;border-radius:10px;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;transition:all .18s;}
+.cal-btn:hover{border-color:var(--accent);color:var(--accent);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-day-name{text-align:center;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:5px 0;}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:.82rem;border-radius:10px;cursor:pointer;transition:all .15s;color:var(--text);}
+.cal-day:hover:not(.empty):not(.past){background:var(--accent-light);}
+.cal-day.empty{pointer-events:none;}
+.cal-day.past{color:var(--border);pointer-events:none;}
+.cal-day.today{color:var(--accent);font-weight:500;}
+.cal-day.selected{background:var(--accent);color:#fff;font-weight:500;}
+.date-alts{display:flex;flex-direction:column;gap:9px;margin-top:14px;}
+.alt-btn{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--muted);cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:10px;text-align:left;}
+.alt-btn:hover{border-color:var(--accent);color:var(--text);background:var(--accent-light);}
+.alt-btn.selected{border-color:var(--accent);background:var(--accent-light);color:var(--text);}
+.alt-icon{font-size:1.1rem;flex-shrink:0;}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.opt{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 12px;cursor:pointer;transition:all .16s;display:flex;flex-direction:column;gap:5px;}
+.opt:hover{border-color:var(--accent);background:var(--accent-light);}
+.opt.selected{border-color:var(--accent);background:var(--accent-light);}
+.opt-icon{font-size:1.3rem;}
+.opt-name{font-size:.82rem;font-weight:500;color:var(--text);}
+.opt-hint{font-size:.7rem;color:var(--muted);}
+.btn-primary{width:100%;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:15px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;cursor:pointer;margin-top:22px;transition:all .18s;letter-spacing:.02em;}
+.btn-primary:hover{background:#b57348;transform:translateY(-1px);}
+.btn-primary:disabled{opacity:.28;cursor:default;transform:none;}
+.btn-ghost{width:100%;background:none;border:1.5px solid var(--border);color:var(--muted);border-radius:var(--radius);padding:13px;font-family:'DM Sans',sans-serif;font-size:.82rem;cursor:pointer;margin-top:10px;transition:all .18s;}
+.btn-ghost:hover{border-color:var(--muted);color:var(--text);}
+.btn-no{width:100%;background:none;border:none;color:#c9b8b0;font-family:'DM Sans',sans-serif;font-size:.78rem;cursor:pointer;margin-top:14px;padding:6px;transition:color .18s;}
+.btn-no:hover{color:var(--muted);}
+.summary{background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-top:4px;}
+.sum-row{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);}
+.sum-row:last-child{border-bottom:none;}
+.sum-icon{font-size:1rem;width:22px;text-align:center;}
+.sum-label{font-size:.65rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px;}
+.sum-val{font-size:.87rem;color:var(--text);}
+.final-icon{font-size:3rem;text-align:center;display:block;margin:32px 0 16px;}
+.final-title{font-family:'Lora',serif;font-size:1.9rem;text-align:center;margin-bottom:10px;color:var(--text);}
+.final-title em{font-style:italic;color:var(--accent);}
+.final-text{font-size:.87rem;color:var(--muted);text-align:center;line-height:1.7;}
+.sending-hint{font-size:.72rem;color:var(--muted);text-align:center;margin-top:10px;min-height:18px;}
+.petal{position:fixed;pointer-events:none;z-index:999;font-size:1.1rem;animation:pfall 1.6s ease-out forwards;}
+@keyframes pfall{0%{opacity:1;transform:translate(0,0) rotate(0deg);}100%{opacity:0;transform:translate(var(--tx),80px) rotate(200deg);}}
+</style>
 </head>
 <body>
-    <h1>Our Products</h1>
-    <div id="category-filter">
-        <label for="category-select">Filter by category:</label>
-        <select id="category-select" onchange="filterProducts()">
-            <option value="all">All Categories</option>
-        </select>
-    </div>
-    <div id="product-list"></div>
-    <div id="cart">
-        <h2>Shopping Cart</h2>
-        <div id="cart-items"></div>
-        <p>Total: $<span id="cart-total">0</span></p>
-        <button onclick="checkout()">Checkout</button>
-    </div>
+<div class="app">
 
-    <div id="product-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeProductModal()">&times;</span>
-            <div id="product-details"></div>
+  <!-- Home -->
+  <div class="screen active" id="sHome">
+    <div class="top-deco">🌹</div>
+    <div class="heading" style="text-align:center;">
+      <div class="heading-label">Приглашение</div>
+      <div class="heading-title">Хочу позвать тебя<br>на <em>свидание</em> в кафе</div>
+      <div class="heading-sub">По скольку мы уже некоторое время знакомы —<br>пожалуйста пройди небольшой опрос 😇</div>
+    </div>
+    <button class="btn-primary" onclick="show('sFoods')">Начать →</button>
+  </div>
+
+  <!-- 1. Food -->
+  <div class="screen" id="sFoods">
+    <div class="top-deco">🍽</div>
+    <div class="heading">
+      <div class="heading-title">Какая еда<br>тебе <em>нравится?</em></div>
+      <div class="heading-sub">Куда ты бы хотела пойти</div>
+    </div>
+    <div class="opts" id="foodOpts">
+      <div class="opt" data-val="Фастфуд" onclick="pickFood(this)"><span class="opt-icon">🍔</span><span class="opt-name">Фастфуд</span></div>
+      <div class="opt" data-val="Суши" onclick="pickFood(this)"><span class="opt-icon">🍣</span><span class="opt-name">Суши</span></div>
+      <div class="opt" data-val="Пицца" onclick="pickFood(this)"><span class="opt-icon">🍕</span><span class="opt-name">Пицца</span></div>
+      <div class="opt" data-val="Десертики" onclick="pickFood(this)"><span class="opt-icon">🍮</span><span class="opt-name">Десертики</span></div>
+      <div class="opt" data-val="Обычная еда" onclick="pickFood(this)"><span class="opt-icon">🥗</span><span class="opt-name">Обычная</span></div>
+      <div class="opt" data-val="Рандом" onclick="pickFood(this)"><span class="opt-icon">🎲</span><span class="opt-name">Рандом</span></div>
+    </div>
+    <button class="btn-primary" id="btnFood" disabled onclick="show('sOpts')">Далее →</button>
+    <button class="btn-ghost" onclick="show('sHome')">← Назад</button>
+  </div>
+
+  <!-- 2. Flowers -->
+  <div class="screen" id="sOpts">
+    <div class="top-deco">💐</div>
+    <div class="heading">
+      <div class="heading-title">Какие цветы<br>тебе <em>нравятся?</em></div>
+      <div class="heading-sub">Я буду с букетом. Ты только выбери.</div>
+    </div>
+    <div class="opts" id="flowerOpts">
+      <div class="opt" data-val="Розы" onclick="pickFlower(this)"><span class="opt-icon">🌹</span><span class="opt-name">Розы</span><span class="opt-hint">Классика</span></div>
+      <div class="opt" data-val="Пионы" onclick="pickFlower(this)"><span class="opt-icon">🌸</span><span class="opt-name">Пионы</span><span class="opt-hint">Уже цветут</span></div>
+      <div class="opt" data-val="Полевые цветы" onclick="pickFlower(this)"><span class="opt-icon">🌼</span><span class="opt-name">Полевые</span><span class="opt-hint">Какие найду</span></div>
+      <div class="opt" data-val="Твой вариант" onclick="pickFlower(this)"><span class="opt-icon">💐</span><span class="opt-name">Твой вариант</span><span class="opt-hint">:)</span></div>
+      <div class="opt" data-val="Сюрприз" onclick="pickFlower(this)"><span class="opt-icon">❓</span><span class="opt-name">Сюрприз</span><span class="opt-hint">Не скажу какие</span></div>
+      <div class="opt" data-val="Без цветов" onclick="pickFlower(this)"><span class="opt-icon">❌</span><span class="opt-name">Без цветов</span><span class="opt-hint">Что-то другое</span></div>
+    </div>
+    <button class="btn-primary" id="btnFlower" disabled onclick="show('sCal')">Далее →</button>
+    <button class="btn-ghost" onclick="show('sFoods')">← Назад</button>
+  </div>
+
+  <!-- 3. Calendar -->
+  <div class="screen" id="sCal">
+    <div class="top-deco">📅</div>
+    <div class="heading">
+      <div class="heading-title">Когда тебе<br><em>удобно?</em></div>
+      <div class="heading-sub">Можешь выбрать день в календаре, или один из вариантов — дату и время ещё согласуем ⏳</div>
+    </div>
+    <div class="cal-nav">
+      <button class="cal-btn" onclick="changeMonth(-1)">‹</button>
+      <span class="cal-month" id="calTitle"></span>
+      <button class="cal-btn" onclick="changeMonth(1)">›</button>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="date-alts">
+      <button class="alt-btn" id="altThink" onclick="pickAlt('think')">
+        <span class="alt-icon">🤔</span>
+        <div>
+          <div style="font-size:.85rem;font-weight:500;color:var(--text);">Нужно время подумать</div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:2px;">Дату определим позже</div>
         </div>
+      </button>
+      <button class="alt-btn" id="altSomeday" onclick="pickAlt('someday')">
+        <span class="alt-icon">🌙</span>
+        <div>
+          <div style="font-size:.85rem;font-weight:500;color:var(--text);">Может, когда-нибудь</div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:2px;">Не сейчас, но кто знает...</div>
+        </div>
+      </button>
     </div>
+    <button class="btn-primary" id="btnDate" disabled onclick="show('sConfirm')">Выбрать →</button>
+    <button class="btn-ghost" onclick="show('sOpts')">← Назад</button>
+  </div>
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+  <!-- Confirm -->
+  <div class="screen" id="sConfirm">
+    <div class="top-deco">✨</div>
+    <div class="heading">
+      <div class="heading-title">Отлично.<br><em>Идёшь?</em></div>
+      <div class="heading-sub">Вот что получилось:</div>
+    </div>
+    <div class="summary">
+      <div class="sum-row"><span class="sum-icon">🍽️</span><div><div class="sum-label">Еда</div><div class="sum-val" id="sumFood">—</div></div></div>
+      <div class="sum-row"><span class="sum-icon">💐</span><div><div class="sum-label">Цветы</div><div class="sum-val" id="sumFlower">—</div></div></div>
+      <div class="sum-row"><span class="sum-icon">📅</span><div><div class="sum-label">Дата</div><div class="sum-val" id="sumDate">—</div></div></div>
+    </div>
+    <button class="btn-primary" id="btnYes" onclick="answer('yes')">Да, я иду! 🥂</button>
+    <div class="sending-hint" id="sendingHint"></div>
+    <button class="btn-no" id="noBtn" onmouseover="dodge()" onclick="answer('no')">Нет, не в этот раз</button>
+    <button class="btn-ghost" onclick="show('sCal')">← Изменить</button>
+  </div>
 
-        // We'll fetch products from the server instead of hardcoding them
-        let products = [];
+  <!-- Yes -->
+  <div class="screen" id="sYes">
+    <span class="final-icon">🥂</span>
+    <div class="final-title">Жду тебя<br><em>с нетерпением</em></div>
+    <div class="final-text" id="yesText" style="margin-bottom:20px;"></div>
+    <div class="summary">
+      <div class="sum-row"><span class="sum-icon">🍽️</span><div><div class="sum-label">Еда</div><div class="sum-val" id="yFood">—</div></div></div>
+      <div class="sum-row"><span class="sum-icon">💐</span><div><div class="sum-label">Цветы</div><div class="sum-val" id="yFlower">—</div></div></div>
+      <div class="sum-row"><span class="sum-icon">📅</span><div><div class="sum-label">Дата</div><div class="sum-val" id="yDate">—</div></div></div>
+    </div>
+  </div>
 
-        // Fetch products from the server
-        fetch('http://localhost:8080/get_products')
-           .then(response => response.json())
-    .then(data => {
-        console.log("Received data:", data);
-        products = data;
-        displayProducts(products);
-        populateCategories();
-    })
-    .catch(error => console.error('Error fetching products:', error));
+  <!-- No -->
+  <div class="screen" id="sNo">
+    <span class="final-icon">🌿</span>
+    <div class="final-title">Ничего страшного</div>
+    <div class="final-text">Надеюсь, ты хотя бы улыбнулась 🙂<br>Моё приглашение остаётся в силе.</div>
+    <button class="btn-primary" style="margin-top:32px;" onclick="restart()">Начать заново</button>
+  </div>
 
-        function displayProducts(productsToShow) {
-            const productList = document.getElementById("product-list");
-            productList.innerHTML = "";
-            productsToShow.forEach(product => {
-                const productDiv = document.createElement("div");
-                productDiv.className = "product";
-                productDiv.innerHTML = `
-                    <img src="${product.image_url}" alt="${product.name}">
-                    <h3>${product.name}</h3>
-                    <p>Price: $${product.price}</p>
-                    <p>Category: ${product.category}</p>
-                    <button onclick="showProductDetails(${product.id})">View Details</button>
-                    <button onclick="addToCart(${product.id})">Add to Cart</button>
-                `;
-                productList.appendChild(productDiv);
-            });
-        }
+</div>
+<script>
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  НАСТРОЙКИ — заполни перед деплоем
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const TG_TOKEN      = '8708871819:AAGLarkQhSHXIUrj6Y4fbfjiaOzTU7HDQX4';   // токен от @BotFather
+const MY_CHAT_ID    = '824181860'; // твой личный chat_id
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-        function showProductDetails(productId) {
-            const product = products.find(p => p.id === productId);
-            if (product) {
-                const detailsDiv = document.getElementById("product-details");
-                detailsDiv.innerHTML = `
-                    <img src="${product.image_url}" alt="${product.name}" style="max-width: 100%; height: auto;">
-                    <h2>${product.name}</h2>
-                    <p>Price: $${product.price}</p>
-                    <p>Category: ${product.category}</p>
-                    <p>${product.description}</p>
-                    <button onclick="addToCart(${product.id})">Add to Cart</button>
-                `;
-                document.getElementById("product-modal").style.display = "block";
-            }
-        }
-        
-        const products = [
-            { id: 1, name: "Product 1", price: 10, description: "This is product 1 description.", category: "Electronics" },
-            { id: 2, name: "Product 2", price: 20, description: "This is product 2 description.", category: "Clothing" },
-            { id: 3, name: "Product 3", price: 30, description: "This is product 3 description.", category: "Electronics" },
-            { id: 4, name: "Product 4", price: 25, description: "This is product 4 description.", category: "Books" },
-            { id: 5, name: "Product 5", price: 15, description: "This is product 5 description.", category: "Clothing" }
-        ];
+// Telegram WebApp SDK
+const tg = window.Telegram?.WebApp;
+if(tg) tg.expand(); // раскрыть на весь экран
 
-        const categories = [...new Set(products.map(product => product.category))];
-        const categorySelect = document.getElementById("category-select");
-        categories.forEach(category => {
-            const option = document.createElement("option");
-            option.value = category;
-            option.textContent = category;
-            categorySelect.appendChild(option);
-        });
-
-        function displayProducts(productsToShow) {
-            const productList = document.getElementById("product-list");
-            productList.innerHTML = "";
-            productsToShow.forEach(product => {
-                const productDiv = document.createElement("div");
-                productDiv.className = "product";
-                productDiv.innerHTML = `
-                    <h3>${product.name}</h3>
-                    <p>Price: $${product.price}</p>
-                    <p>Category: ${product.category}</p>
-                    <button onclick="showProductDetails(${product.id})">View Details</button>
-                    <button onclick="addToCart(${product.id})">Add to Cart</button>
-                `;
-                productList.appendChild(productDiv);
-            });
-        }
-
-        function filterProducts() {
-            const selectedCategory = document.getElementById("category-select").value;
-            const filteredProducts = selectedCategory === "all" 
-                ? products 
-                : products.filter(product => product.category === selectedCategory);
-            displayProducts(filteredProducts);
-        }
-
-        displayProducts(products);
-
-        const cart = [];
-
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            if (product) {
-                cart.push(product);
-                updateCartDisplay();
-                tg.HapticFeedback.impactOccurred("light");
-            }
-        }
-
-        function updateCartDisplay() {
-            const cartItems = document.getElementById("cart-items");
-            const cartTotal = document.getElementById("cart-total");
-            
-            cartItems.innerHTML = "";
-            let total = 0;
-
-            cart.forEach(product => {
-                const item = document.createElement("div");
-                item.innerHTML = `${product.name} - $${product.price}`;
-                cartItems.appendChild(item);
-                total += product.price;
-            });
-
-            cartTotal.textContent = total;
-        }
-
-        function checkout() {
-    const cartItems = cart.map(product => ({
-        id: product.id,
-        price: product.price,
-        quantity: 1  // You may want to add quantity functionality to your cart
-    }));
-    tg.sendData(JSON.stringify({ cart: cartItems }));
-    tg.close();
+// Получаем данные пользователя из Telegram
+function getTgUser(){
+  const u = tg?.initDataUnsafe?.user;
+  if(!u) return null;
+  return {
+    id:        u.id,
+    firstName: u.first_name || '',
+    lastName:  u.last_name  || '',
+    username:  u.username   || null,
+    langCode:  u.language_code || '?'
+  };
 }
 
-        function showProductDetails(productId) {
-            const product = products.find(p => p.id === productId);
-            if (product) {
-                const detailsDiv = document.getElementById("product-details");
-                detailsDiv.innerHTML = `
-                    <h2>${product.name}</h2>
-                    <p>Price: $${product.price}</p>
-                    <p>Category: ${product.category}</p>
-                    <p>${product.description}</p>
-                    <button onclick="addToCart(${product.id})">Add to Cart</button>
-                `;
-                document.getElementById("product-modal").style.display = "block";
-            }
-        }
+const MONTHS=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+const DAYS=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+let calY,calM,selDate=null,selDateLabel=null,selFood=null,selFlower=null,dodges=0;
 
-        function closeProductModal() {
-            document.getElementById("product-modal").style.display = "none";
-        }
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='sConfirm'){
+    document.getElementById('sumFood').textContent   = selFood||'—';
+    document.getElementById('sumFlower').textContent = selFlower||'—';
+    document.getElementById('sumDate').textContent   = selDateLabel||'—';
+    document.getElementById('sendingHint').textContent = '';
+    document.getElementById('btnYes').disabled = false;
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 
-        // Close modal when clicking outside of it
-        window.onclick = function(event) {
-            const modal = document.getElementById("product-modal");
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    </script>
+function init(){
+  const n=new Date();calY=n.getFullYear();calM=n.getMonth();renderCal();
+}
+
+function renderCal(){
+  document.getElementById('calTitle').textContent=MONTHS[calM]+' '+calY;
+  const g=document.getElementById('calGrid');g.innerHTML='';
+  DAYS.forEach(d=>{const e=document.createElement('div');e.className='cal-day-name';e.textContent=d;g.appendChild(e);});
+  let s=new Date(calY,calM,1).getDay();s=s===0?6:s-1;
+  for(let i=0;i<s;i++){const e=document.createElement('div');e.className='cal-day empty';g.appendChild(e);}
+  const dim=new Date(calY,calM+1,0).getDate();
+  const today=new Date();today.setHours(0,0,0,0);
+  for(let d=1;d<=dim;d++){
+    const date=new Date(calY,calM,d);
+    const e=document.createElement('div');e.className='cal-day';e.textContent=d;
+    if(date<today)e.classList.add('past');
+    else if(date.toDateString()===today.toDateString())e.classList.add('today');
+    if(selDate&&date.toDateString()===selDate.toDateString())e.classList.add('selected');
+    e.addEventListener('click',()=>{
+      selDate=date; selDateLabel=fmt(date);
+      document.getElementById('altThink').classList.remove('selected');
+      document.getElementById('altSomeday').classList.remove('selected');
+      document.querySelectorAll('.cal-day').forEach(x=>x.classList.remove('selected'));
+      e.classList.add('selected');
+      document.getElementById('btnDate').disabled=false;
+    });
+    g.appendChild(e);
+  }
+}
+
+function changeMonth(d){calM+=d;if(calM>11){calM=0;calY++;}if(calM<0){calM=11;calY--;}renderCal();}
+
+function pickAlt(type){
+  selDate=null;
+  document.querySelectorAll('.cal-day').forEach(x=>x.classList.remove('selected'));
+  document.getElementById('altThink').classList.remove('selected');
+  document.getElementById('altSomeday').classList.remove('selected');
+  if(type==='think'){
+    selDateLabel='Нужно время подумать';
+    document.getElementById('altThink').classList.add('selected');
+  } else {
+    selDateLabel='Может, когда-нибудь';
+    document.getElementById('altSomeday').classList.add('selected');
+  }
+  document.getElementById('btnDate').disabled=false;
+}
+
+function pickFood(el){
+  document.querySelectorAll('#foodOpts .opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  selFood=el.dataset.val;
+  document.getElementById('btnFood').disabled=false;
+}
+
+function pickFlower(el){
+  document.querySelectorAll('#flowerOpts .opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  selFlower=el.dataset.val;
+  document.getElementById('btnFlower').disabled=false;
+}
+
+function fmt(d){if(!d)return'—';return d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear();}
+
+async function tgSend(chat_id, text){
+  if(!TG_TOKEN || TG_TOKEN==='8708871819:AAGLarkQhSHXIUrj6Y4fbfjiaOzTU7HDQX4') return;
+  try{
+    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({chat_id, text, parse_mode:'HTML'})
+    });
+  }catch(e){console.warn('TG error',e);}
+}
+
+async function answer(v){
+  const btn  = document.getElementById('btnYes');
+  const hint = document.getElementById('sendingHint');
+  btn.disabled = true;
+  hint.textContent = 'Отправляю...';
+
+  const user     = getTgUser();
+  const now      = new Date().toLocaleString('ru-RU',{timeZone:'Europe/Riga'});
+  const isVague  = selDateLabel==='Нужно время подумать' || selDateLabel==='Может, когда-нибудь';
+
+  if(v==='yes'){
+
+    // ── Тебе: подробное сообщение ──────────────────────────────
+    let myMsg = `🌹 <b>Новый ответ на приглашение!</b>\n\n`;
+
+    if(user){
+      const uname = user.username ? `@${user.username}` : '<i>нет username</i>';
+      const fullName = [user.firstName, user.lastName].filter(Boolean).join(' ');
+      myMsg += `👤 <b>Кто:</b> ${fullName}\n`;
+      myMsg += `🔗 <b>Username:</b> ${uname}\n`;
+      myMsg += `🆔 <b>User ID:</b> <code>${user.id}</code>\n`;
+      myMsg += `🌐 <b>Язык:</b> ${user.langCode}\n`;
+    } else {
+      myMsg += `👤 <b>Кто:</b> открыто вне Telegram (тест)\n`;
+    }
+
+    myMsg += `\n`;
+    myMsg += `🍽 <b>Еда:</b> ${selFood||'—'}\n`;
+    myMsg += `💐 <b>Цветы:</b> ${selFlower||'—'}\n`;
+    myMsg += `📅 <b>Дата:</b> ${selDateLabel||'—'}\n`;
+    myMsg += `\n`;
+    myMsg += `✅ <b>Ответ: ДА, идёт!</b>\n`;
+    myMsg += `🕐 <i>${now} (Рига)</i>`;
+
+    await tgSend(MY_CHAT_ID, myMsg);
+
+    // ── Ей: милое короткое подтверждение ──────────────────────
+    if(user?.id){
+      const herName = user.firstName || 'Привет';
+      let herMsg = `${herName}, отлично! 🌹\n\n`;
+
+      if(isVague){
+        herMsg += `Спасибо что ответила. Когда будешь готова — напиши, я подстроюсь 🙂`;
+      } else {
+        herMsg += `Записал — <b>${selDateLabel}</b>.\n`;
+        herMsg += `Буду ждать с ${selFlower!=='Без цветов' ? selFlower.toLowerCase() : 'сюрпризом'} 💐\n\n`;
+        herMsg += `До скорого ✨`;
+      }
+
+      await tgSend(user.id, herMsg);
+    }
+
+    // ── Показываем финальный экран ─────────────────────────────
+    document.getElementById('yFood').textContent   = selFood||'—';
+    document.getElementById('yFlower').textContent = selFlower||'—';
+    document.getElementById('yDate').textContent   = selDateLabel||'—';
+    document.getElementById('yesText').textContent = isVague
+      ? 'Буду ждать твоего решения 🌷'
+      : 'Буду ждать тебя '+selDateLabel+'. Обещаю, всё будет вкусно 🍷';
+
+    show('sYes');
+    burst();
+
+  } else {
+
+    // ── Тебе: тоже уведомление о "нет" ────────────────────────
+    let myMsg = `🌿 <b>Ответ на приглашение</b>\n\n`;
+
+    if(user){
+      const uname = user.username ? `@${user.username}` : '<i>нет username</i>';
+      const fullName = [user.firstName, user.lastName].filter(Boolean).join(' ');
+      myMsg += `👤 <b>Кто:</b> ${fullName}\n`;
+      myMsg += `🔗 <b>Username:</b> ${uname}\n`;
+      myMsg += `🆔 <b>User ID:</b> <code>${user.id}</code>\n\n`;
+    }
+
+    myMsg += `🍽 <b>Еда:</b> ${selFood||'—'}\n`;
+    myMsg += `💐 <b>Цветы:</b> ${selFlower||'—'}\n`;
+    myMsg += `📅 <b>Дата:</b> ${selDateLabel||'—'}\n\n`;
+    myMsg += `❌ <b>Ответ: не в этот раз</b>\n`;
+    myMsg += `🕐 <i>${now} (Рига)</i>`;
+
+    await tgSend(MY_CHAT_ID, myMsg);
+
+    // ── Ей: ничего не отправляем (она сама нажала "нет") ──────
+    show('sNo');
+  }
+}
+
+function dodge(){
+  if(dodges>=4)return;dodges++;
+  const btn=document.getElementById('noBtn');
+  const app=document.querySelector('.app');
+  const maxX=app.offsetWidth-btn.offsetWidth-36;
+  btn.style.position='relative';
+  btn.style.left=(Math.random()*maxX-maxX/2)+'px';
+  btn.style.top=(Math.random()*30-15)+'px';
+}
+
+function restart(){
+  selDate=null;selDateLabel=null;selFood=null;selFlower=null;dodges=0;
+  document.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+  document.querySelectorAll('.alt-btn').forEach(b=>b.classList.remove('selected'));
+  ['btnDate','btnFood','btnFlower'].forEach(id=>document.getElementById(id).disabled=true);
+  const nb=document.getElementById('noBtn');nb.style.left='';nb.style.top='';
+  init();show('sHome');
+}
+
+function burst(){
+  const icons=['🌸','✨','🌹','🥂','💛','🌷'];
+  for(let i=0;i<20;i++){
+    setTimeout(()=>{
+      const p=document.createElement('div');p.className='petal';
+      p.textContent=icons[Math.floor(Math.random()*icons.length)];
+      p.style.left=Math.random()*90+'vw';
+      p.style.top=Math.random()*50+'vh';
+      p.style.setProperty('--tx',(Math.random()*60-30)+'px');
+      p.style.animationDuration=(.9+Math.random()*1)+'s';
+      document.body.appendChild(p);
+      setTimeout(()=>p.remove(),2000);
+    },i*80);
+  }
+}
+
+init();
+</script>
 </body>
 </html>
