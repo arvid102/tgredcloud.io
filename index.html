@@ -83,11 +83,12 @@ body{
   <div class="screen active" id="sHome">
     <div class="top-deco">🌹</div>
     <div class="heading" style="text-align:center;">
-      <div class="heading-label">Приглашение</div>
-      <div class="heading-title">Хочу позвать тебя<br>на <em>свидание</em> в кафе</div>
-      <div class="heading-sub">По скольку мы уже некоторое время знакомы —<br>пожалуйста пройди небольшой опрос 😇</div>
+      <div class="heading-label"><b>Приглашение</b></div><br>
+      <p>По скольку мы уже некоторое время мы знакомы я</p><br>
+      <div class="heading-title">Хочу позвать тебя<br>на <em>свидание</em> в кафе</div><br>
+      <div class="heading-sub"><br>пожалуйста пройди небольшой опрос 😇</div>
     </div>
-    <button class="btn-primary" onclick="show('sFoods')">Начать →</button>
+    <button class="btn-primary" onclick="show('sFoods')"> →</button>
   </div>
 
   <!-- 1. Food -->
@@ -114,7 +115,7 @@ body{
     <div class="top-deco">💐</div>
     <div class="heading">
       <div class="heading-title">Какие цветы<br>тебе <em>нравятся?</em></div>
-      <div class="heading-sub">Я буду с букетом. Ты только выбери.</div>
+      <div class="heading-sub">Я буду с букетом. какие хотела бы ты получить</div>
     </div>
     <div class="opts" id="flowerOpts">
       <div class="opt" data-val="Розы" onclick="pickFlower(this)"><span class="opt-icon">🌹</span><span class="opt-name">Розы</span><span class="opt-hint">Классика</span></div>
@@ -173,7 +174,7 @@ body{
       <div class="sum-row"><span class="sum-icon">💐</span><div><div class="sum-label">Цветы</div><div class="sum-val" id="sumFlower">—</div></div></div>
       <div class="sum-row"><span class="sum-icon">📅</span><div><div class="sum-label">Дата</div><div class="sum-val" id="sumDate">—</div></div></div>
     </div>
-    <button class="btn-primary" id="btnYes" onclick="answer('yes')">Да, я иду! 🥂</button>
+    <button class="btn-primary" id="btnYes" onclick="answer('yes')">Да, я иду! ⭐️</button>
     <div class="sending-hint" id="sendingHint"></div>
     <button class="btn-no" id="noBtn" onmouseover="dodge()" onclick="answer('no')">Нет, не в этот раз</button>
     <button class="btn-ghost" onclick="show('sCal')">← Изменить</button>
@@ -181,7 +182,7 @@ body{
 
   <!-- Yes -->
   <div class="screen" id="sYes">
-    <span class="final-icon">🥂</span>
+    <span class="final-icon">⭐️</span>
     <div class="final-title">Жду тебя<br><em>с нетерпением</em></div>
     <div class="final-text" id="yesText" style="margin-bottom:20px;"></div>
     <div class="summary">
@@ -193,7 +194,7 @@ body{
 
   <!-- No -->
   <div class="screen" id="sNo">
-    <span class="final-icon">🌿</span>
+    <span class="final-icon">⭐️</span>
     <div class="final-title">Ничего страшного</div>
     <div class="final-text">Надеюсь, ты хотя бы улыбнулась 🙂<br>Моё приглашение остаётся в силе.</div>
     <button class="btn-primary" style="margin-top:32px;" onclick="restart()">Начать заново</button>
@@ -204,7 +205,7 @@ body{
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 //  НАСТРОЙКИ
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const MY_CHAT_ID = '824181860'; // твой личный chat_id
+const MY_CHAT_ID = '824181860'; 
 const PROXY_URL  = 'https://hot-resonance-a368.ergonomichead.workers.dev';
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
