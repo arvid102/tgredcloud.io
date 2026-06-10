@@ -201,12 +201,12 @@ body{
 
 </div>
 <script>
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-//  НАСТРОЙКИ — заполни перед деплоем
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const TG_TOKEN      = '8708871819:AAGLarkQhSHXIUrj6Y4fbfjiaOzTU7HDQX4';   // токен от @BotFather
-const MY_CHAT_ID    = '824181860'; // твой личный chat_id
-// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+//  НАСТРОЙКИ
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+const MY_CHAT_ID = 'СЮДА_ТВОЙ_CHAT_ID'; // твой личный chat_id
+const PROXY_URL  = 'https://hot-resonance-a368.ergonomichead.workers.dev';
+// ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 // Telegram WebApp SDK
 const tg = window.Telegram?.WebApp;
@@ -306,21 +306,17 @@ function pickFlower(el){
 function fmt(d){if(!d)return'—';return d.getDate()+' '+MONTHS[d.getMonth()]+' '+d.getFullYear();}
 
 async function tgSend(chat_id, text){
-  if(!TG_TOKEN || TG_TOKEN==='СЮДА_ТОКЕН_БОТА'){
-    console.warn('TG: токен не заполнен');
-    return {ok:false, error:'токен не заполнен'};
-  }
   try{
-    const res  = await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`,{
+    const res  = await fetch(PROXY_URL, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({chat_id, text, parse_mode:'HTML'})
+      body:JSON.stringify({chat_id, text})
     });
     const json = await res.json();
-    console.log('TG sendMessage →', chat_id, json);
+    console.log('TG →', chat_id, json);
     return json;
   }catch(e){
-    console.error('TG fetch error:', e);
+    console.error('TG error:', e);
     return {ok:false, error:e.message};
   }
 }
