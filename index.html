@@ -120,7 +120,7 @@ body{
     <div class="opts" id="flowerOpts">
       <div class="opt" data-val="Розы" onclick="pickFlower(this)"><span class="opt-icon">🌹</span><span class="opt-name">Розы</span><span class="opt-hint">Классика</span></div>
       <div class="opt" data-val="Пионы" onclick="pickFlower(this)"><span class="opt-icon">🌸</span><span class="opt-name">Пионы</span><span class="opt-hint">Уже цветут</span></div>
-      <div class="opt" data-val="Полевые цветы" onclick="pickFlower(this)"><span class="opt-icon">🌼</span><span class="opt-name">Полевые</span><span class="opt-hint">Какие найду</span></div>
+      <div class="opt" data-val="Полевые цветы" onclick="pickFlower(this)"><span class="opt-icon">🌼</span><span class="opt-name">Полевые</span><span class="opt-hint">Ромашки</span></div>
       <div class="opt" data-val="Твой вариант" onclick="pickFlower(this)"><span class="opt-icon">💐</span><span class="opt-name">Твой вариант</span><span class="opt-hint">:)</span></div>
       <div class="opt" data-val="Сюрприз" onclick="pickFlower(this)"><span class="opt-icon">❓</span><span class="opt-name">Сюрприз</span><span class="opt-hint">Не скажу какие</span></div>
       <div class="opt" data-val="Без цветов" onclick="pickFlower(this)"><span class="opt-icon">❌</span><span class="opt-name">Без цветов</span><span class="opt-hint">Что-то другое</span></div>
@@ -386,7 +386,7 @@ async function answer(v){
     document.getElementById('yDate').textContent   = selDateLabel||'—';
     document.getElementById('yesText').textContent = isVague
       ? 'Буду ждать твоего решения 🌷'
-      : 'Буду ждать тебя '+selDateLabel+'. Обещаю, всё будет вкусно 🍷';
+      : 'Буду ждать тебя '+selDateLabel+'. ';
 
     show('sYes');
     burst();
